@@ -1,5 +1,5 @@
-mod utils;
 mod days;
+mod utils;
 
 fn main() {
     let day_01 = utils::read_input("01");
