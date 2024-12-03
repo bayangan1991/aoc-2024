@@ -9,6 +9,10 @@ fn parse_line(line: &str) -> Vec<u32> {
 fn check_line(line: &Vec<u32>) -> bool {
     let sorted = line.iter().is_sorted() || line.iter().rev().is_sorted();
 
+    if !sorted {
+        return false;
+    }
+
     let diff_match: Vec<_> = pairwise(line)
         .filter(|(l, r)| match (l, r) {
             (Some(l), r) => {
@@ -19,7 +23,7 @@ fn check_line(line: &Vec<u32>) -> bool {
         })
         .collect();
 
-    sorted && diff_match.len() == 0
+    diff_match.len() == 0
 }
 
 fn check_unsafe_line(line: &Vec<u32>) -> bool {
