@@ -8,7 +8,6 @@ pub fn exec(source: &str) -> (usize, usize) {
     let mut part_1 = 0;
     let mut part_2 = 0;
     for result in mul.captures_iter(source) {
-        println!("{:?}", result);
         match &result["inst"] {
             "do" => {
                 enabled = true;
