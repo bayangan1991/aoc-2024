@@ -9,7 +9,7 @@ fn parse_line(line: &str) -> (i32, i32) {
 }
 
 fn parse_list(source: &str) -> Vec<(i32, i32)> {
-    source.split('\n').map(parse_line).collect()
+    source.lines().map(parse_line).collect()
 }
 
 pub fn exec(source: &str) -> (u32, usize) {

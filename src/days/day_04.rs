@@ -7,7 +7,7 @@ fn parse_line(line: &str) -> HashMap<usize, char> {
 pub fn exec(input: &str) -> (usize, usize) {
     let grid: HashMap<usize, _> = HashMap::from_iter(
         input
-            .split('\n')
+            .lines()
             .enumerate()
             .map(|(y, line)| (y, parse_line(line)))
             .into_iter(),

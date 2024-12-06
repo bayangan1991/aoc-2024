@@ -41,7 +41,7 @@ fn check_unsafe_line(line: &Vec<u32>) -> bool {
 }
 
 pub fn exec(source: &str) -> (usize, usize) {
-    let lines: Vec<_> = source.split('\n').map(|line| parse_line(line)).collect();
+    let lines: Vec<_> = source.lines().map(|line| parse_line(line)).collect();
     let safe_lines = lines.iter().filter(|line| check_line(line)).count();
 
     let unsafe_lines = lines.iter().filter(|line| !check_line(line));
