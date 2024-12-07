@@ -7,15 +7,11 @@ fn item_order(
     rules: &HashSet<(usize, usize)>,
     rules_rev: &HashSet<(usize, usize)>,
 ) -> Ordering {
-    for (rule_l, rule_r) in rules {
-        if l == *rule_l && r == *rule_r {
-            return Ordering::Less;
-        }
+    if rules.contains(&(l, r)) {
+        return Ordering::Less;
     }
-    for (rule_l, rule_r) in rules_rev {
-        if l == *rule_l && r == *rule_r {
-            return Ordering::Greater;
-        }
+    if rules_rev.contains(&(l, r)) {
+        return Ordering::Greater;
     }
 
     Ordering::Equal
