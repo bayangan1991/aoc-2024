@@ -36,4 +36,9 @@ fn main() {
     let day_07 = days::day_07::exec(&day_07);
     println!("Day 7, Part 1: {}", day_07.0);
     println!("Day 7, Part 2: {}\n", day_07.1);
+
+    let day_08 = utils::read_input("08");
+    let day_08 = days::day_08::exec(&day_08);
+    println!("Day 8, Part 1: {}", day_08.0);
+    println!("Day 8, Part 2: {}\n", day_08.1);
 }
