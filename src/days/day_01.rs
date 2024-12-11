@@ -12,7 +12,7 @@ fn parse_list(source: &str) -> Vec<(i32, i32)> {
     source.lines().map(parse_line).collect()
 }
 
-pub fn exec(source: &str) -> (u32, usize) {
+pub fn exec(source: &str) -> (usize, usize) {
     let result = parse_list(source);
 
     let (mut left, mut right): (Vec<_>, Vec<_>) = result.iter().cloned().unzip();
@@ -20,7 +20,7 @@ pub fn exec(source: &str) -> (u32, usize) {
     left.sort();
     right.sort();
 
-    let part_one = left
+    let part_one: u32 = left
         .iter()
         .zip(right.iter())
         .map(|(l, r)| l.abs_diff(*r))
@@ -31,5 +31,5 @@ pub fn exec(source: &str) -> (u32, usize) {
         .map(|l| right.iter().filter(|r| *r == l).count() * *l as usize)
         .sum();
 
-    (part_one, part_two)
+    (part_one as usize, part_two)
 }
