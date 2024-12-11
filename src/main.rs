@@ -12,6 +12,7 @@ fn main() {
         days::day_07::exec,
         days::day_08::exec,
         days::day_09::exec,
+        days::day_10::exec,
     ];
 
     for (day, exec) in functions.iter().enumerate() {
