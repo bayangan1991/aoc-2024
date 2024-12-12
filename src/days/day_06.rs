@@ -37,9 +37,14 @@ fn _print_map(map: &Map, current_position: MapKey, current_dir: usize, visited: 
     println!();
 }
 
-fn evaluate_path(map: &Map, start: MapKey) -> (HashSet<(MapKey, isize)>, bool) {
-    let mut direction = 0;
+fn evaluate_path(
+    map: &Map,
+    start: MapKey,
+    direction: isize,
+) -> (HashSet<(MapKey, isize)>, bool, HashMap<MapKey, isize>) {
+    let mut direction = direction;
     let mut touched_places = HashSet::new();
+    let mut first_visits = HashMap::new();
     let mut current_pos = start;
 
     touched_places.insert((start, direction));
@@ -54,13 +59,16 @@ fn evaluate_path(map: &Map, start: MapKey) -> (HashSet<(MapKey, isize)>, bool) {
         };
 
         if touched_places.contains(&(next_step, direction)) {
-            return (touched_places, true);
+            return (touched_places, true, first_visits);
         }
 
         match map.get(&next_step) {
             Some(&Thing::Air | &Thing::Start) => {
                 touched_places.insert((next_step, direction));
                 current_pos = next_step;
+                if !first_visits.contains_key(&current_pos) {
+                    first_visits.insert(current_pos, direction);
+                }
             }
             Some(&Thing::Obstruction) => {
                 direction = (direction + 1) % 4;
@@ -70,7 +78,7 @@ fn evaluate_path(map: &Map, start: MapKey) -> (HashSet<(MapKey, isize)>, bool) {
         //_print_map(&map, current_pos, direction, &touched_places);
     }
 
-    (touched_places, false)
+    (touched_places, false, first_visits)
 }
 
 pub fn exec(input: &str) -> (usize, usize) {
@@ -101,7 +109,7 @@ pub fn exec(input: &str) -> (usize, usize) {
         .collect::<HashMap<_, _>>();
     let start = **inverted.get(&Thing::Start).unwrap();
 
-    let part_1_path = evaluate_path(&map, start);
+    let part_1_path = evaluate_path(&map, start, 0);
 
     let part_1 = part_1_path
         .0
@@ -111,16 +119,21 @@ pub fn exec(input: &str) -> (usize, usize) {
         .len();
 
     let part_2 = part_1_path
-        .0
+        .2
         .iter()
-        .filter_map(|(obst, _)| {
-            if *obst == start {
-                return None;
-            };
+        .filter_map(|(obst, direction)| {
             let new_map = &mut map.clone();
             new_map.insert(*obst, Thing::Obstruction);
 
-            if evaluate_path(&new_map, start).1 {
+            let prev = match direction {
+                0 => (obst.0 + 1, obst.1),
+                1 => (obst.0, obst.1 - 1),
+                2 => (obst.0 - 1, obst.1),
+                3 => (obst.0, obst.1 + 1),
+                _ => panic!("Unknown direction: {}", direction),
+            };
+
+            if evaluate_path(&new_map, prev, *direction).1 {
                 Some(obst)
             } else {
                 None
